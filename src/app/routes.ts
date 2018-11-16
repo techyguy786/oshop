@@ -7,17 +7,20 @@ import { CheckOutComponent } from './check-out/check-out.component';
 import { LoginComponent } from './login/login.component';
 import { AdminProductsComponent } from './admin/admin-products/admin-products.component';
 import { AdminOrdersComponent } from './admin/admin-orders/admin-orders.component';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
 
 export const appRoute: Routes = [
     // routes for normal users
-    { path: '', component: HomeComponent },
     { path: 'products', component: ProductsComponent },
     { path: 'shopping-cart', component: ShoppingCartComponent },
     { path: 'check-out', component: CheckOutComponent },
     { path: 'order-success', component: OrderSuccessComponent },
+    { path: 'my/orders', component: MyOrdersComponent },
     { path: 'login', component: LoginComponent },
 
     // routes for admin
     { path: 'admin/products', component: AdminProductsComponent },
-    { path: 'admin/orders', component: AdminOrdersComponent }
+    { path: 'admin/orders', component: AdminOrdersComponent },
+
+    { path: '', component: HomeComponent },
 ];
