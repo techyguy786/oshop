@@ -2,27 +2,47 @@
 <form #f="ngForm" (ngSubmit)="save(f.value)">
   <div class="form-group">
     <label for="title">Title</label>
-    <input ngModel name="title" id="title" type="text" class="form-control">
+    <input ngModel name="title" #title="ngModel" required 
+      id="title" type="text" class="form-control"
+      [ngClass]="{ 'is-invalid': title.touched && title.invalid }">
+    <div class="invalid-feedback" *ngIf="title.touched && title.invalid">
+      <div *ngIf="title.hasError('required')">Title is Required</div>
+    </div>
   </div>
   <div class="form-group">
     <label for="price">Price</label>
     <div class="input-group">
       <span class="input-group-text">$</span>
-      <input ngModel name="price" id="price" type="number" class="form-control">
+      <input ngModel #price="ngModel" required name="price" 
+        id="price" type="number" class="form-control"
+        [ngClass]="{ 'is-invalid': price.touched && price.invalid }">
+      <div class="invalid-feedback" *ngIf="price.touched && price.invalid">
+        <div *ngIf="price.hasError('required')">Price is Required</div>
+      </div>
     </div>
   </div>
   <div class="form-group">
     <label for="category">Category</label>
-    <select ngModel name="category" id="category" class="form-control">
+    <select ngModel name="category" #category="ngModel" required 
+      id="category" class="form-control"
+      [ngClass]="{ 'is-invalid': category.touched && category.invalid }">
       <option value=""></option>
       <option *ngFor="let category of categories$ | async" [value]="category.key">
         {{ category.name }}
       </option>
     </select>
+    <div class="invalid-feedback" *ngIf="category.touched && category.invalid">
+      <div *ngIf="category.hasError('required')">Category is Required</div>
+    </div>
   </div>
   <div class="form-group">
     <label for="imageUrl">Image URL</label>
-    <input ngModel name="imageUrl" id="imageUrl" type="text" class="form-control">
+    <input ngModel name="imageUrl" #imageUrl="ngModel" required
+       id="imageUrl" type="text" class="form-control"
+       [ngClass]="{'is-invalid': imageUrl.touched && imageUrl.invalid}">
+    <div class="invalid-feedback" *ngIf="imageUrl.touched && imageUrl.invalid">
+      <div *ngIf="imageUrl.hasError('required')">Image URL is Required</div>
+    </div>
   </div>
   <button type="submit" class="btn btn-primary">Save</button>
 </form>
