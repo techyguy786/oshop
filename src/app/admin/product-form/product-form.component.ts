@@ -2,6 +2,7 @@ import { ProductService } from './../../product.service';
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from 'src/app/category.service';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-form',
@@ -11,11 +12,10 @@ import { map } from 'rxjs/operators';
 export class ProductFormComponent implements OnInit {
   categories$;
 
-  // no access modifier because we just want to use it in the constructor,
-  // even not in the class
   constructor(
-    categoryService: CategoryService,
-    private productService: ProductService
+    private categoryService: CategoryService,
+    private productService: ProductService,
+    private router: Router
   ) {
     this.categories$ = categoryService.getCategories().snapshotChanges()
       .pipe(
@@ -34,5 +34,6 @@ export class ProductFormComponent implements OnInit {
 
   save(product) {
     this.productService.create(product);
+    this.router.navigate(['/admin/products']);
   }
 }
