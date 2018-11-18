@@ -12,6 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class ProductFormComponent implements OnInit {
   categories$;
   product: any = {};
+  id;
 
   constructor(
     private categoryService: CategoryService,
@@ -19,11 +20,11 @@ export class ProductFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    const id = route.snapshot.paramMap.get('id');
+    this.id = this.route.snapshot.paramMap.get('id');
     // it will automatically unsubscribe the observable after getting first item
     // after this observable will be complete and we'll not get any value in future
-    if (id) {
-      productService.get(id)
+    if (this.id) {
+      productService.get(this.id)
         .pipe(
           take(1)
         )
@@ -45,7 +46,12 @@ export class ProductFormComponent implements OnInit {
   }
 
   save(product) {
-    this.productService.create(product);
+    if (this.id) {
+      this.productService.update(this.id, product);
+    } else {
+      this.productService.create(product);
+    }
+
     this.router.navigate(['/admin/products']);
   }
 }
