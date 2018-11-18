@@ -1,8 +1,8 @@
 import { ProductService } from './../../product.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CategoryService } from 'src/app/category.service';
-import { map } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { map, take } from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-product-form',
@@ -11,13 +11,28 @@ import { Router } from '@angular/router';
 })
 export class ProductFormComponent implements OnInit {
   categories$;
+  product: any = {};
 
   constructor(
     private categoryService: CategoryService,
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
-    this.categories$ = categoryService.getCategories().snapshotChanges()
+    const id = route.snapshot.paramMap.get('id');
+    // it will automatically unsubscribe the observable after getting first item
+    // after this observable will be complete and we'll not get any value in future
+    if (id) {
+      productService.get(id)
+        .pipe(
+          take(1)
+        )
+        .subscribe(p => this.product = p);
+    }
+  }
+
+  ngOnInit() {
+    this.categories$ = this.categoryService.getCategories().snapshotChanges()
       .pipe(
         map(items => {
           return items.map(a => {
@@ -27,9 +42,6 @@ export class ProductFormComponent implements OnInit {
           });
         })
       );
-  }
-
-  ngOnInit() {
   }
 
   save(product) {

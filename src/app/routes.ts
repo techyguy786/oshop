@@ -22,15 +22,20 @@ export const appRoute: Routes = [
     { path: 'check-out', component: CheckOutComponent, canActivate: [AuthGuard] },
     { path: 'order-success', component: OrderSuccessComponent, canActivate: [AuthGuard] },
     { path: 'my/orders', component: MyOrdersComponent, canActivate: [AuthGuard] },
-    // routes for admin
-    {
-        path: 'admin/products',
-        component: AdminProductsComponent,
-        canActivate: [AuthGuard, AdminAuthGuard]
-    },
+    // routes for admin: Always routes more specific to generic
     {
         path: 'admin/products/new',
         component: ProductFormComponent,
+        canActivate: [AuthGuard, AdminAuthGuard]
+    },
+    {
+        path: 'admin/products/:id',
+        component: ProductFormComponent,
+        canActivate: [AuthGuard, AdminAuthGuard]
+    },
+    {
+        path: 'admin/products',
+        component: AdminProductsComponent,
         canActivate: [AuthGuard, AdminAuthGuard]
     },
     {
