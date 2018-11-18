@@ -10,7 +10,9 @@ import { map } from 'rxjs/operators';
 export class AdminProductsComponent implements OnInit {
   products$;
 
-  constructor(private productService: ProductService) { }
+  constructor(
+    private productService: ProductService
+  ) { }
 
   ngOnInit() {
     this.products$ = this.productService.getAll().snapshotChanges()
@@ -24,5 +26,4 @@ export class AdminProductsComponent implements OnInit {
         })
       );
   }
-
 }

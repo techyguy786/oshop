@@ -47,7 +47,9 @@
           <div *ngIf="imageUrl.hasError('url')">Please enter a valid URL.</div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Save</button>
+      <!-- By default button submit the form. So Delete button must type 'button' -->
+      <button class="btn btn-primary mr-1">Save</button>
+      <button type="button" class="btn btn-danger" (click)="delete()">Delete</button>
     </form>
   </div>
   <div class="col-md-6">
