@@ -33,7 +33,7 @@ export class ProductFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.categories$ = this.categoryService.getCategories().snapshotChanges()
+    this.categories$ = this.categoryService.getAll().snapshotChanges()
       .pipe(
         map(items => {
           return items.map(a => {

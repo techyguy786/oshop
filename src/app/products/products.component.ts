@@ -1,3 +1,4 @@
+import { CategoryService } from './../category.service';
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../product.service';
 
@@ -8,9 +9,14 @@ import { ProductService } from '../product.service';
 })
 export class ProductsComponent {
   products$;
+  categories$;
 
-  constructor(productService: ProductService) {
+  constructor(
+    productService: ProductService,
+    categoryService: CategoryService
+  ) {
     this.products$ = productService.getAll().valueChanges();
+    this.categories$ = categoryService.getAll().valueChanges();
   }
 
 }
