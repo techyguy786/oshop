@@ -8,6 +8,8 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomFormsModule } from 'ng2-validation';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
@@ -52,7 +54,13 @@ import { ProductService } from './product.service';
     AngularFireDatabaseModule,
     RouterModule.forRoot(appRoute),
     NgbModule.forRoot(),
-    CustomFormsModule
+    CustomFormsModule,
+    NoopAnimationsModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [
     AuthService,
