@@ -1,8 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
-import { CategoryService } from './../category.service';
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../product.service';
-import { map, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { Product } from '../models/product';
 
 @Component({
@@ -13,12 +12,10 @@ import { Product } from '../models/product';
 export class ProductsComponent {
   products: Product[] = [];
   filteredProducts: Product[] = [];
-  categories$;
   category: string;
 
   constructor(
     productService: ProductService,
-    categoryService: CategoryService,
     route: ActivatedRoute
   ) {
     // it is kinda ugly observable within observable
@@ -49,17 +46,6 @@ export class ProductsComponent {
           this.filteredProducts = (this.category) ?
             this.products.filter(p => p.category === this.category) : this.products;
       });
-
-    this.categories$ = categoryService.getAll().snapshotChanges()
-                          .pipe(
-                            map(items => {
-                              return items.map(a => {
-                                const data = a.payload.val();
-                                const key = a.payload.key;
-                                return {key, ...data};
-                              });
-                            })
-                          );
   }
 
 }
