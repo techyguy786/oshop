@@ -1,3 +1,4 @@
+import { Product } from './models/product';
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 
@@ -13,7 +14,7 @@ export class ProductService {
   }
 
   getAll() {
-    return this.db.list('/products');
+    return this.db.list<Product>('/products');
   }
 
   get(productId) {

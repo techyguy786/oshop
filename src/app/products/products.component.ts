@@ -2,7 +2,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CategoryService } from './../category.service';
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../product.service';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Product } from '../models/product';
 
 @Component({
@@ -21,9 +21,35 @@ export class ProductsComponent {
     categoryService: CategoryService,
     route: ActivatedRoute
   ) {
-    productService.getAll().valueChanges().subscribe((products: Product[]) => {
-      this.products = products;
-    });
+    // it is kinda ugly observable within observable
+
+    // productService.getAll().valueChanges().subscribe((products: Product[]) => {
+    //   this.products = products;
+
+    //   route.queryParamMap.subscribe(params => {
+    //     this.category = params.get('category');
+
+    //     this.filteredProducts = (this.category) ?
+    //       this.products.filter(p => p.category === this.category) : this.products;
+    //   });
+    // });
+
+    // With switchmap, we can switch observable to another observable,
+    // now we no longer have nested observable
+    productService.getAll().valueChanges()
+      .pipe(
+        switchMap(products => {
+          this.products = products;
+          return route.queryParamMap;
+        })
+      )
+      .subscribe(params => {
+          this.category = params.get('category');
+
+          this.filteredProducts = (this.category) ?
+            this.products.filter(p => p.category === this.category) : this.products;
+      });
+
     this.categories$ = categoryService.getAll().snapshotChanges()
                           .pipe(
                             map(items => {
@@ -34,13 +60,6 @@ export class ProductsComponent {
                               });
                             })
                           );
-
-    route.queryParamMap.subscribe(params => {
-      this.category = params.get('category');
-
-      this.filteredProducts = (this.category) ?
-        this.products.filter(p => p.category === this.category) : this.products;
-    });
   }
 
 }
