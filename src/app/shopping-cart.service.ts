@@ -16,12 +16,13 @@ export class ShoppingCartService {
     });
   }
 
-  private getCart(cartId: string) {
+  async getCart() {
+    const cartId = await this.getOrCreateCartId();
     return this.db.object('/shopping-carts/' + cartId);
   }
 
   // if we use async on method, it means it is returning Promise
-  private async getOrCreateCartId() {
+  private async getOrCreateCartId(): Promise<string> {
     const cartId = localStorage.getItem('cartId');
 
     if (cartId) {
