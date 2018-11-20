@@ -1,7 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../product.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { Product } from '../models/product';
 
 @Component({
@@ -20,32 +20,43 @@ export class ProductsComponent {
   ) {
     // it is kinda ugly observable within observable
 
-    // productService.getAll().valueChanges().subscribe((products: Product[]) => {
-    //   this.products = products;
-
-    //   route.queryParamMap.subscribe(params => {
-    //     this.category = params.get('category');
-
-    //     this.filteredProducts = (this.category) ?
-    //       this.products.filter(p => p.category === this.category) : this.products;
-    //   });
-    // });
-
-    // With switchmap, we can switch observable to another observable,
-    // now we no longer have nested observable
-    productService.getAll().valueChanges()
+    productService.getAll().snapshotChanges()
       .pipe(
-        switchMap(products => {
-          this.products = products;
-          return route.queryParamMap;
+        map(items => {
+          return items.map(a => {
+            const data = a.payload.val();
+            const key = a.payload.key;
+            return {key, ...data};
+          });
         })
       )
-      .subscribe(params => {
+      .subscribe((products: Product[]) => {
+        this.products = products;
+
+        route.queryParamMap.subscribe(params => {
           this.category = params.get('category');
 
           this.filteredProducts = (this.category) ?
             this.products.filter(p => p.category === this.category) : this.products;
+        });
       });
+
+    // With switchmap, we can switch observable to another observable,
+    // now we no longer have nested observable
+    // productService.getAll().valueChanges()
+    //   .pipe(
+    //     switchMap(products => {
+    //       this.products = products;
+    //       return route.queryParamMap;
+    //     }),
+    //   )
+    //   .subscribe(params => {
+    //       this.category = params.get('category');
+
+    //       this.filteredProducts = (this.category) ?
+    //         this.products.filter(p => p.category === this.category) : this.products;
+    //       console.log(this.filteredProducts);
+    //   });
   }
 
 }
