@@ -1,5 +1,6 @@
 import { Product } from 'src/app/models/product';
 import { Component, Input } from '@angular/core';
+import { ShoppingCartService } from '../shopping-cart.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -12,6 +13,20 @@ export class ProductCardComponent {
   // tslint:disable-next-line:no-input-rename
   @Input('show-actions') showActions = true;
 
-  constructor() { }
+  constructor(private cartService: ShoppingCartService) { }
 
+  addToCart(product: Product) {
+    const cartId = localStorage.getItem('cartId');
+
+    if (!cartId) {
+      this.cartService.create().then(result => {
+        localStorage.setItem('cartId', result.key);
+
+        // Add product to cart
+
+      });
+    } else {
+      // Add Product to Cart
+    }
+  }
 }
