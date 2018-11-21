@@ -39,6 +39,14 @@ export class ShoppingCartService {
   }
 
   async addToCart(product: Product) {
+    this.updateItemQuantity(product, 1);
+  }
+
+  async removeFromCart(product: Product) {
+    this.updateItemQuantity(product, -1);
+  }
+
+  private async updateItemQuantity(product: Product, change: number) {
     const cartId = await this.getOrCreateCartId();
     const item$ = this.getItem(cartId, product.key);
 
@@ -46,7 +54,7 @@ export class ShoppingCartService {
       take(1)
     ).subscribe((item: any) => {
       if (item.key != null) {
-        item$.update({ quantity: (item.payload.val().quantity || 0) + 1 });
+        item$.update({ quantity: (item.payload.val().quantity || 0) + change });
       } else {
         item$.set({ product: product, quantity: 1 });
       }
